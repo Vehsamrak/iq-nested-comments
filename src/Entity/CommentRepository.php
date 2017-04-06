@@ -12,6 +12,31 @@ class CommentRepository extends AbstractRepository
 {
 
     /**
+     * @return Comment[]
+     */
+    public function findAll(): array
+    {
+        $queryResult = $this->connection->prepare('
+            SELECT id, text, level, right_key FROM comments c ORDER BY left_key
+        ');
+
+        $queryResult->execute();
+        $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
+
+        $comments = [];
+        foreach ($commentsData as $commentData) {
+            $comments[] = new Comment(
+                $commentData['text'],
+                $commentData['level'],
+                $commentData['right_key'],
+                $commentData['id']
+            );
+        }
+
+        return $comments;
+    }
+
+    /**
      * @return Comment|null
      */
     public function findById(int $id)
