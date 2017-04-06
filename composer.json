@@ -1,0 +1,10 @@
+{
+    "name": "petr/iqoption",
+    "authors": [
+        {
+            "name": "Petr Karmashev",
+            "email": "smonkl@bk.ru"
+        }
+    ],
+    "require": {}
+}
