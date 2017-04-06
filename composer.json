@@ -6,5 +6,10 @@
             "email": "smonkl@bk.ru"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Petr\\Comments\\": "src/"
+        }
+    }
 }
