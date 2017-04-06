@@ -10,7 +10,9 @@ use Petr\Comments\Core\Exception\ControllerNotFound;
  */
 class Router
 {
-    const INDEX_NAME = 'index';
+
+    const DEFAULT_CONTROLLER_NAME = 'default';
+    const DEFAULT_ACTION_NAME = 'index';
 
     /**
      * Starting session and running application
@@ -31,38 +33,40 @@ class Router
 
         /** @var AbstractController $controller */
         $controller = new $controllerName;
+
         return $controller->processAction($action);
     }
-    /**
-     * @return array
-     */
+
     private function parseRoutes(): array
     {
         $pathInfo = $_SERVER['PATH_INFO'] ?? null;
+
         return $pathInfo ? explode('/', $pathInfo) : [];
     }
-    /**
-     * @param array $routes
-     * @return string
-     */
+
     private function getControllerName(array $routes): string
     {
-        $route = self::INDEX_NAME;
+        $route = self::DEFAULT_CONTROLLER_NAME;
+
         if (isset($routes[1])) {
             $route = strtolower($routes[1]);
         }
-        return 'Controller\\' . ucfirst($route) . 'Controller';
+
+        $classPath = explode('\\', __NAMESPACE__);
+        array_pop($classPath);
+        $newClassPath = implode('\\', $classPath);
+
+        return sprintf('\\%s\\Controller\\%sController', $newClassPath, ucfirst($route));
     }
-    /**
-     * @param array $routes
-     * @return string
-     */
+
     private function getAction(array $routes): string
     {
-        $action = self::INDEX_NAME;
+        $action = self::DEFAULT_ACTION_NAME;
+
         if (isset($routes[2])) {
             $action = strtolower($routes[2]);
         }
+
         return $action;
     }
 }
