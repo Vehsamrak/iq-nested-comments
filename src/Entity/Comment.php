@@ -15,9 +15,11 @@ class Comment
     /** @var int */
     private $level;
 
-    public function __construct(string $text)
+    public function __construct(int $id, string $text, int $level)
     {
+        $this->id = $id;
         $this->text = $text;
+        $this->level = $level;
     }
 
     public function getId(): int
