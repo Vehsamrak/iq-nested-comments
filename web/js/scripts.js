@@ -20,6 +20,7 @@ $(function () {
             var $html = $('<div class="comment" data-id="' + commentId + '">' +
                 '<div class="text">' + commentText + '</div>' +
                 '<div class="buttons">' +
+                '<span class="button reply" title="Reply to this comment"></span>' +
                 '<span class="button edit" title="Edit this comment"></span>' +
                 '<span class="button delete" title="Delete this comment and all his children"></span>' +
                 '</div></div>');
