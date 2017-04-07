@@ -78,6 +78,24 @@ class CommentController extends AbstractController
         $repository->save($comment);
     }
 
+    public function deleteAction(): void
+    {
+        $commentId = filter_var($this->getParameter('id'), FILTER_SANITIZE_STRING);
+
+        if (!$commentId) {
+            throw new ValidationError('id');
+        }
+
+        $repository = $this->getCommentRepository();
+        $comment = $repository->findById($commentId);
+
+        if (!$comment) {
+            throw new EntityNotFound();
+        }
+
+        $repository->remove($comment);
+    }
+
     private function getCommentRepository(): CommentRepository
     {
         $database = new Database();

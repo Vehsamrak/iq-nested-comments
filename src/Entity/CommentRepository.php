@@ -118,6 +118,31 @@ class CommentRepository extends AbstractRepository
         $query->execute();
     }
 
+    public function remove(Comment $comment): void
+    {
+        $query = $this->connection->prepare('
+            LOCK TABLE comments WRITE;
+            
+            DELETE FROM comments
+            WHERE left_key >= :left_key AND right_key <= :right_key;
+            
+            UPDATE comments
+            SET left_key = IF(left_key > :left_key, left_key - (:right_key :left_key + 1), left_key), 
+                right_key = right_key - (:right_key - :left_key + 1) 
+            WHERE right_key > :right_key;
+            
+            UNLOCK TABLES;
+        ');
+
+        $leftKey = $comment->getLeftKey();
+        $rightKey = $comment->getRightKey();
+
+        $query->bindParam('left_key', $leftKey, \PDO::PARAM_INT);
+        $query->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
+
+        $query->execute();
+    }
+
     private function getMaximalRightKey(): int
     {
         $query = $this->connection->prepare('SELECT MAX(right_key) FROM comments');
