@@ -8,7 +8,7 @@ namespace Petr\Comments\Entity;
 class Comment
 {
 
-    /** @var int */
+    /** @var string */
     private $id;
     /** @var string */
     private $text;

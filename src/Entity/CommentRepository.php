@@ -6,6 +6,7 @@ use Petr\Comments\Core\AbstractRepository;
 use Petr\Comments\Core\Exception\EntityNotFound;
 
 /**
+ * Database queries encapculation
  * @author Vehsamrak
  */
 class CommentRepository extends AbstractRepository
@@ -86,6 +87,9 @@ class CommentRepository extends AbstractRepository
         return $comments;
     }
 
+    /**
+     * @throws EntityNotFound
+     */
     public function saveReplyComment(string $commentText, string $parentCommentId): string
     {
         $parentComment = $this->findById($parentCommentId);
