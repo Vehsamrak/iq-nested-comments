@@ -1,0 +1,58 @@
+body {
+    font-size: 18px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#add-comment {
+    display: inline-block;
+    cursor: pointer;
+    background-color: rgb(54, 83, 55);
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#add-comment:hover {
+    background-color: rgb(94, 141, 95);
+}
+
+.comment {
+    display: block;
+    padding: 10px;
+    margin: 30px;
+    text-align: center;
+}
+
+.comment .text {
+    display: inline-block;
+    background-color: rgb(225, 225, 225);
+    padding: 20px;
+    width: 60%;
+    text-align: justify;
+}
+
+.controls {
+    text-align: center;
+}
+
+.delete {
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+    padding: 10px;
+    width: 25px;
+    background-color: #eb0400;
+    text-align: center;
+    color: white;
+}
+
+.delete:hover {
+    opacity: 0.5;
+}

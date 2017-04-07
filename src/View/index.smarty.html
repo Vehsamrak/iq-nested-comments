@@ -1,17 +1,27 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="web/css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="web/css/styles.css"/>
     <meta charset="UTF-8">
     <title>Nested Comments</title>
+    <link href="/css/styles.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 <body>
 
-<h1>Comments list</h1>
+<h1>Comments</h1>
 
 {foreach $comments as $comment}
-    <p>{$comment->getId()} {$comment->getText()}</p>
+    <div class="comment" data-id="{$comment->getId()}">
+        <span class="text">{$comment->getText()}</span>
+        <span class="delete">✖</span>
+    </div>
 {/foreach}
+
+<div class="controls">
+    <span id="add-comment">Add New Comment</span>
+</div>
 
 </body>
 </html>
