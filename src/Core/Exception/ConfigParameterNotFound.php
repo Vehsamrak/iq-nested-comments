@@ -7,5 +7,8 @@ namespace Petr\Comments\Core\Exception;
  */
 class ConfigParameterNotFound extends \Exception
 {
-
+    public function __construct()
+    {
+        parent::__construct('Entity not found.');
+    }
 }
