@@ -12,16 +12,16 @@
 
 <h1>Comments</h1>
 
+<div class="controls">
+    <span id="add-comment">Add New Comment</span>
+</div>
+
 {foreach $comments as $comment}
     <div class="comment" data-id="{$comment->getId()}">
         <span class="text">{$comment->getText()}</span>
         <span class="delete">✖</span>
     </div>
 {/foreach}
-
-<div class="controls">
-    <span id="add-comment">Add New Comment</span>
-</div>
 
 </body>
 </html>
