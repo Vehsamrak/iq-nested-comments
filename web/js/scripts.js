@@ -41,7 +41,30 @@ $(function () {
 
             $('#add-comment').show();
         });
+    });
 
+    $('.button.edit').click(function () {
+        var $this = $(this);
+        var $comment = $this.parent().parent();
+        var $buttons = $comment.find('.buttons');
+        var $textContainer = $comment.find('.text');
+        var text = $textContainer.html();
+
+        $buttons.hide();
+
+        $textContainer.html('<textarea cols="50" rows="3">' + text + '</textarea>' +
+            '<span class="button save">Save</span>');
+    });
+
+    $('body').on('click', '.button.save', function () {
+        var $this = $(this);
+        var $comment = $this.parent().parent();
+        var $buttons = $comment.find('.buttons');
+        var $textContainer = $comment.find('.text');
+        var text = $comment.find('textarea').val();
+
+        $textContainer.html(text);
+        $buttons.show();
     });
 
     function renderComment(commentId, commentText, commentLevel) {
