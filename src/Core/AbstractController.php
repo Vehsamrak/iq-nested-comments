@@ -20,7 +20,7 @@ abstract class AbstractController
 
     public function __construct()
     {
-        $this->smarty = SmartyFactory::create();
+        $this->smarty = Smarty::getInstance();
     }
 
     /**

@@ -5,11 +5,15 @@ namespace Petr\Comments\Core;
 /**
  * @author Vehsamrak
  */
-class SmartyFactory
+class Smarty
 {
     private static $smarty;
 
-    public static function create(): \Smarty
+    private function __construct()
+    {
+    }
+
+    public static function getInstance(): \Smarty
     {
         if (!self::$smarty) {
             $viewPath = join(DIRECTORY_SEPARATOR, [SRC_PATH, 'View']);

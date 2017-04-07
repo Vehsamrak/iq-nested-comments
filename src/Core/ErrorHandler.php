@@ -13,7 +13,7 @@ class ErrorHandler
 
     public function __construct()
     {
-        $this->smarty = SmartyFactory::create();
+        $this->smarty = Smarty::getInstance();
     }
 
     public function handle(\Exception $exception)
