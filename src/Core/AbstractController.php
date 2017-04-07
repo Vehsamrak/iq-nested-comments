@@ -12,8 +12,8 @@ use Petr\Comments\Core\Exception\ControllerNotFound;
 abstract class AbstractController
 {
 
-    const HTTP_METHOD_POST = 'POST';
-    const HTTP_METHOD_GET = 'GET';
+    private const HTTP_METHOD_POST = 'POST';
+    private const HTTP_METHOD_GET = 'GET';
 
     /** @var Renderer */
     private $renderer;
