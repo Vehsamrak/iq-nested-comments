@@ -1,6 +1,12 @@
-1. Database `iq_option_comments` must be created.
-1. Table `comments` must be created inside `iq_option_comments` database.
+### Installation
 
+1. Database `iq_option_comments` must be created.
+1. MySQL user `root` with empty password must have access to database.
+1. Table `comments` with schema (see below) must be created inside `iq_option_comments` database.
+1. `composer install`
+1. Run php builtin webserver `php -S localhost:8000 -t web`
+1. Application is ready on `http://localhost:8000`
+---
 ### Features
 
 [✓] PHP 7.1
@@ -14,3 +20,22 @@
 [✓] Usage of jQuery
 
 [✓] Nested Sets were used to store tree structure in database
+
+---
+
+### Database table schema
+
+```sql
+CREATE TABLE `comments` (
+	`id` VARCHAR(36) NOT NULL,
+	`text` TEXT NOT NULL,
+	`left_key` INT(16) UNSIGNED NOT NULL DEFAULT '0',
+	`right_key` INT(16) UNSIGNED NOT NULL DEFAULT '0',
+	`level` INT(16) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`),
+	INDEX `index_left_key` (`left_key`, `right_key`, `level`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+```
