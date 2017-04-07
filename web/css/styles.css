@@ -34,7 +34,7 @@ h1 {
     display: inline-block;
     background-color: rgb(225, 225, 225);
     padding: 20px;
-    width: 60%;
+    width: 85%;
     text-align: justify;
 }
 
@@ -42,17 +42,35 @@ h1 {
     text-align: center;
 }
 
-.delete {
+.button {
     display: inline-block;
     vertical-align: top;
     cursor: pointer;
     padding: 10px;
     width: 25px;
-    background-color: #eb0400;
     text-align: center;
+}
+
+.button:hover {
+    opacity: 0.5;
+}
+
+.delete {
+    background-color: #eb0400;
     color: white;
 }
 
-.delete:hover {
-    opacity: 0.5;
+.delete:after {
+    content: "✖";
+}
+
+.closed, .opened {
+    background-color: #10371d;
+    color: white;
+}
+
+.closed:after {
+    content: "+";
+    font-weight: 800;
+    font-size: 25px;
 }
