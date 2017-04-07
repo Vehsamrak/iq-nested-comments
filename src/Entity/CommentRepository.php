@@ -80,9 +80,13 @@ class CommentRepository extends AbstractRepository
             ORDER BY left_key
         ');
 
-        $queryResult->bindParam('left_key', $parentComment->getLeftKey(), \PDO::PARAM_INT);
-        $queryResult->bindParam('right_key', $parentComment->getRightKey(), \PDO::PARAM_INT);
-        $queryResult->bindParam('level', $parentComment->getLevel(), \PDO::PARAM_INT);
+        $leftKey = $parentComment->getLeftKey();
+        $rightKey = $parentComment->getRightKey();
+        $level = $parentComment->getLevel();
+
+        $queryResult->bindParam('left_key', $leftKey, \PDO::PARAM_INT);
+        $queryResult->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
+        $queryResult->bindParam('level', $level, \PDO::PARAM_INT);
         $queryResult->execute();
         $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
 
