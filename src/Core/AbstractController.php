@@ -6,7 +6,7 @@ use Petr\Comments\Core\Exception\ActionNotFound;
 use Petr\Comments\Core\Exception\ControllerNotFound;
 
 /**
- * Abstract controller. Extend this class to make new controllers.
+ * Abstract controller
  * @author Vehsamrak
  */
 abstract class AbstractController
@@ -109,9 +109,6 @@ abstract class AbstractController
         return $controller->processAction($action);
     }
 
-    /**
-     * @param string $url
-     */
     protected function redirect(string $url)
     {
         header(sprintf('Location: %s', $url));
@@ -119,8 +116,6 @@ abstract class AbstractController
 
     /**
      * Check request method
-     * @param string $method
-     * @return bool
      */
     private function isRequestMethod(string $method): bool
     {
