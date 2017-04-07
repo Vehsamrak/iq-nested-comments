@@ -58,7 +58,7 @@ class CommentRepository extends AbstractRepository
             ) : null;
     }
 
-    public function saveReplyComment(string $commentText, int $parentCommentId)
+    public function saveReplyComment(string $commentText, int $parentCommentId): int
     {
         $parentComment = $this->findById($parentCommentId);
 
@@ -67,14 +67,23 @@ class CommentRepository extends AbstractRepository
         }
 
         $this->persistComment($commentText, $parentComment->getRightKey(), $parentComment->getLevel());
+
+        return $this->getLasCreatedCommentId();
     }
 
-    public function saveRootComment(string $commentText)
+    public function saveRootComment(string $commentText): int
     {
         $level = 0;
         $rightKey = $this->getMaximalRightKey() + 1;
 
         $this->persistComment($commentText, $rightKey, $level);
+
+        return $this->getLasCreatedCommentId();
+    }
+
+    private function getLasCreatedCommentId(): int
+    {
+        return $this->connection->lastInsertId();
     }
 
     private function getMaximalRightKey(): int
