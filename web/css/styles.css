@@ -126,6 +126,7 @@ h1 {
 .level-block {
     display: inline-block;
     width: 100px;
+    padding: 2px;
 }
 
 #post-new-comment {

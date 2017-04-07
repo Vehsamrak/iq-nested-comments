@@ -9,6 +9,7 @@ $(function () {
         var requestData = {'parentCommentId': $comment.data('id')};
 
         $this.hide();
+        $('<div class="level-block"></div>').insertAfter($this);
 
         $.post('/comment/list', requestData, function (comments) {
             JSON.parse(comments).reverse().forEach(function (comment) {
@@ -74,8 +75,21 @@ $(function () {
         });
     });
 
+    $body.on('click', '.button.reply', function () {
+        var $this = $(this);
+        var $comment = $this.parent().parent();
+        var $buttons = $comment.find('.buttons');
+        var $textContainer = $comment.find('.text');
+
+        $buttons.hide();
+
+        $textContainer.append('<p><textarea cols="50" rows="3"></textarea>' +
+            '<span class="button post-reply">Reply</span></p>');
+    });
+
     function renderComment(commentId, commentText, commentLevel) {
         var $html = $('<div class="comment" data-id="' + commentId + '">' +
+            '<div class="level-block"></div>' +
             '<div class="text">' + commentText + '</div>' +
             '<div class="buttons">' +
             '<span class="button reply" title="Reply to this comment"></span>' +

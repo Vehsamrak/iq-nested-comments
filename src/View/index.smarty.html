@@ -16,7 +16,7 @@
         <div class="viewall">
             <span class="button open" title="View all child comments">view thread</span>
         </div>
-        <div class="text">{$comment->getText()}</div>
+        <div class="text">{$comment->getText()|escape}</div>
         <div class="buttons">
             <span class="button reply" title="Reply to this comment"></span>
             <span class="button edit" title="Edit this comment"></span>
