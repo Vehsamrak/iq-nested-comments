@@ -26,11 +26,11 @@ class CommentRepository extends AbstractRepository
 
         return $queryResult
             ? new Comment(
+                $queryResult['id'],
                 $queryResult['text'],
                 $queryResult['level'],
                 $queryResult['left_key'],
-                $queryResult['right_key'],
-                $queryResult['id']
+                $queryResult['right_key']
             ) : null;
     }
 
@@ -49,11 +49,11 @@ class CommentRepository extends AbstractRepository
         $comments = [];
         foreach ($commentsData as $commentData) {
             $comments[] = new Comment(
+                $commentData['id'],
                 $commentData['text'],
                 $commentData['level'],
                 $commentData['left_key'],
-                $commentData['right_key'],
-                $commentData['id']
+                $commentData['right_key']
             );
         }
 
@@ -89,18 +89,18 @@ class CommentRepository extends AbstractRepository
         $comments = [];
         foreach ($commentsData as $commentData) {
             $comments[] = new Comment(
+                $commentData['id'],
                 $commentData['text'],
                 $commentData['level'],
                 $commentData['left_key'],
-                $commentData['right_key'],
-                $commentData['id']
+                $commentData['right_key']
             );
         }
 
         return $comments;
     }
 
-    public function saveReplyComment(string $commentText, int $parentCommentId): int
+    public function saveReplyComment(string $commentText, int $parentCommentId): string
     {
         $parentComment = $this->findById($parentCommentId);
 
@@ -108,24 +108,15 @@ class CommentRepository extends AbstractRepository
             throw new EntityNotFound();
         }
 
-        $this->persistComment($commentText, $parentComment->getRightKey(), $parentComment->getLevel());
-
-        return $this->getLasCreatedCommentId();
+        return $this->persistComment($commentText, $parentComment->getRightKey(), $parentComment->getLevel());
     }
 
-    public function saveRootComment(string $commentText): int
+    public function saveRootComment(string $commentText): string
     {
         $level = 0;
         $rightKey = $this->getMaximalRightKey() + 1;
 
-        $this->persistComment($commentText, $rightKey, $level);
-
-        return $this->getLasCreatedCommentId();
-    }
-
-    private function getLasCreatedCommentId(): int
-    {
-        return $this->connection->lastInsertId();
+        return $this->persistComment($commentText, $rightKey, $level);
     }
 
     private function getMaximalRightKey(): int
@@ -141,7 +132,7 @@ class CommentRepository extends AbstractRepository
         return (int) $maximalRightKey;
     }
 
-    private function persistComment(string $commentText, int $rightKey, int $level): void
+    private function persistComment(string $commentText, int $rightKey, int $level): string
     {
         $queryResults = $this->connection->prepare('
             LOCK TABLE comments WRITE;
@@ -155,15 +146,21 @@ class CommentRepository extends AbstractRepository
                 SET left_key = :right_key, 
                     right_key = :right_key + 1, 
                     level = :level + 1,
+                    id = :id,
                     text = :text;
             
             UNLOCK TABLES;
         ');
 
+        $id = $this->idGenerator->generateRandomId();
+
         $queryResults->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
         $queryResults->bindParam('level', $level, \PDO::PARAM_INT);
         $queryResults->bindParam('text', $commentText, \PDO::PARAM_STR);
+        $queryResults->bindParam('id', $id, \PDO::PARAM_STR);
 
         $queryResults->execute();
+
+        return $id;
     }
 }

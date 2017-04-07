@@ -19,7 +19,7 @@ class Comment
     /** @var int */
     private $rightKey;
 
-    public function __construct(string $text, int $level, int $leftKey, int $rightKey, int $id = null)
+    public function __construct(string $id, string $text, int $level, int $leftKey, int $rightKey)
     {
         $this->id = $id;
         $this->text = $text;
@@ -28,7 +28,7 @@ class Comment
         $this->rightKey = $rightKey;
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
