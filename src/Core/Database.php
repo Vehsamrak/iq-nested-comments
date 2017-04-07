@@ -24,7 +24,8 @@ class Database
         $this->connection = new \PDO(
             $dsn,
             Config::get('database_user'),
-            Config::get('database_password')
+            Config::get('database_password'),
+            [\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"]
         );
     }
 
