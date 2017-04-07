@@ -52,6 +52,8 @@ h1 {
 }
 
 .button {
+    background-color: #10371d;
+    color: white;
     display: inline-block;
     vertical-align: top;
     cursor: pointer;
@@ -107,6 +109,10 @@ h1 {
     color: white;
 }
 
+.post {
+    padding: 15px;
+}
+
 .comment-controls {
     text-align: center;
 }
@@ -120,4 +126,10 @@ h1 {
 .level-block {
     display: inline-block;
     width: 100px;
+}
+
+#post-new-comment {
+    display: none;
+    text-align: center;
+    height: 50px;
 }
