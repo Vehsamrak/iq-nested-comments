@@ -39,8 +39,9 @@ $(function () {
             var level = 1;
 
             var $comment = renderComment(commentId, text, level);
-
             $comment.insertBefore('.controls');
+
+            $comment.wrap('<span class="thread"></span>');
 
             $('#add-comment').show();
         });
@@ -103,6 +104,26 @@ $(function () {
 
         $buttons.show();
         $('p.reply-block').remove();
+    });
+
+    $body.on('click', '.button.delete', function () {
+        var $this = $(this);
+        var $comment = $this.closest('.comment');
+        var currentLevel = $comment.data('level');
+        var id = $comment.data('id');
+
+        $comment.siblings().each(function () {
+            var $this = $(this);
+            var level = $this.data('level');
+
+            if (level > currentLevel) {
+                $this.remove();
+            }
+        });
+
+        $comment.remove();
+
+        $.post('/comment/delete', {'id': id});
     });
 
     function renderComment(commentId, commentText, commentLevel) {
