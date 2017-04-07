@@ -40,7 +40,7 @@ $(function () {
 
             var $comment = renderComment(commentId, text, level);
 
-            $comment.insertAfter($('.comment').last());
+            $comment.insertBefore('.controls');
 
             $('#add-comment').show();
         });
