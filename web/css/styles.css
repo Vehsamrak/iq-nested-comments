@@ -24,18 +24,25 @@ h1 {
 }
 
 .comment {
-    display: block;
     padding: 10px;
-    margin: 30px;
-    text-align: center;
+    margin-bottom: 5px;
+}
+
+.comment div {
+    display: inline-block;
+    vertical-align: top;
 }
 
 .comment .text {
     display: inline-block;
     background-color: rgb(225, 225, 225);
     padding: 20px;
-    width: 80%;
     text-align: justify;
+    min-height: 70px;
+    min-width: 300px;
+    max-width: 75%;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .controls {
@@ -65,12 +72,14 @@ h1 {
 }
 
 .edit {
-    width: 40px;
+    width: 41px;
     height: 40px;
-    padding: 1px;
+    padding: 2px;
     background-color: rgb(54, 83, 55);
     color: white;
     font-size: 35px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .edit:after {
@@ -90,4 +99,10 @@ h1 {
     background-color: rgb(54, 83, 55);
     color: white;
     padding: 10px;
+}
+
+.level-block {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
 }

@@ -58,6 +58,7 @@ class Comment
         return [
             'id' => $this->getId(),
             'text' => $this->getText(),
+            'level' => $this->getLevel(),
         ];
     }
 }

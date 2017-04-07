@@ -13,14 +13,14 @@
 
 {foreach $comments as $comment}
     <div class="comment" data-id="{$comment->getId()}">
-        <span class="button open" title="View all child comments">view all</span>
-        <span class="text">
-            {$comment->getText()}
-        </span>
-        <span class="buttons">
+        <div class="viewall">
+            <span class="button open" title="View all child comments">view thread</span>
+        </div>
+        <div class="text">{$comment->getText()}</div>
+        <div class="buttons">
             <span class="button edit" title="Edit this comment"></span>
             <span class="button delete" title="Delete this comment and all his children"></span>
-        </span>
+        </div>
     </div>
 {/foreach}
 
