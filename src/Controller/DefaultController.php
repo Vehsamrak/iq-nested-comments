@@ -15,15 +15,14 @@ class DefaultController extends AbstractController
     public function indexAction()
     {
         $database = new Database();
-        $connection = $database->getConnection();
-        $repository = new CommentRepository($connection);
+        $repository = new CommentRepository($database->getConnection());
 
-        $allComments = $repository->findAll();
+        $rootComments = $repository->findRootComments();
 
         $this->render(
             'index',
             [
-                'comments' => $allComments,
+                'comments' => $rootComments,
             ]
         );
     }

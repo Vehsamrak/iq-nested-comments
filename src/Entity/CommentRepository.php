@@ -14,10 +14,10 @@ class CommentRepository extends AbstractRepository
     /**
      * @return Comment[]
      */
-    public function findAll(): array
+    public function findRootComments(): array
     {
         $queryResult = $this->connection->prepare('
-            SELECT id, text, level, right_key FROM comments c ORDER BY left_key
+            SELECT id, text, level, right_key FROM comments c WHERE level = 1 ORDER BY left_key
         ');
 
         $queryResult->execute();
