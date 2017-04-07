@@ -34,7 +34,7 @@ h1 {
     display: inline-block;
     background-color: rgb(225, 225, 225);
     padding: 20px;
-    width: 85%;
+    width: 80%;
     text-align: justify;
 }
 
@@ -47,7 +47,6 @@ h1 {
     vertical-align: top;
     cursor: pointer;
     padding: 10px;
-    width: 25px;
     text-align: center;
 }
 
@@ -56,6 +55,7 @@ h1 {
 }
 
 .delete {
+    width: 25px;
     background-color: #eb0400;
     color: white;
 }
@@ -64,13 +64,30 @@ h1 {
     content: "✖";
 }
 
+.edit {
+    width: 40px;
+    height: 40px;
+    padding: 1px;
+    background-color: rgb(54, 83, 55);
+    color: white;
+    font-size: 35px;
+}
+
+.edit:after {
+    content: "✍";
+}
+
 .closed, .opened {
     background-color: #10371d;
     color: white;
 }
 
-.closed:after {
-    content: "+";
-    font-weight: 800;
-    font-size: 25px;
+.comment-controls {
+    text-align: center;
+}
+
+.comment-controls span {
+    background-color: rgb(54, 83, 55);
+    color: white;
+    padding: 10px;
 }

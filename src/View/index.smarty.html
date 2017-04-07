@@ -12,17 +12,22 @@
 
 <h1>Comments</h1>
 
-<div class="controls">
-    <span id="add-comment">Add New Comment</span>
-</div>
-
 {foreach $comments as $comment}
     <div class="comment" data-id="{$comment->getId()}">
-        <span class="button closed"></span>
-        <span class="text">{$comment->getText()}</span>
-        <span class="button delete"></span>
+        <span class="button closed" title="View all child comments">view all</span>
+        <span class="text">
+            {$comment->getText()}
+        </span>
+        <span class="buttons">
+            <span class="button edit" title="Edit this comment"></span>
+            <span class="button delete" title="Delete this comment and all his children"></span>
+        </span>
     </div>
 {/foreach}
+
+<div class="controls">
+    <span id="add-comment" title="Add new comment">Add New Comment</span>
+</div>
 
 </body>
 </html>
