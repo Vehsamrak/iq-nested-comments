@@ -8,12 +8,12 @@ namespace Petr\Comments\Core;
 class ErrorHandler
 {
 
-    /** @var Renderer */
-    private $renderer;
+    /** @var \Smarty */
+    private $smarty;
 
     public function __construct()
     {
-        $this->renderer = new Renderer();
+        $this->smarty = SmartyFactory::create();
     }
 
     public function handle(\Exception $exception)
@@ -26,18 +26,10 @@ class ErrorHandler
      */
     private function renderException(\Exception $exception)
     {
-        $templatePath = join(
-            DIRECTORY_SEPARATOR,
-            [
-                Renderer::getUserViewDirectory(),
-                'error',
-                'error.php',
-            ]
-        );
-
         $this->sendHeaders($exception);
 
-        require_once($templatePath);
+        $this->smarty->assign(['exception' => $exception]);
+        $this->smarty->display('error/error.smarty.html');
     }
 
     private function sendHeaders(\Exception $exception)
