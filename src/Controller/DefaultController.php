@@ -12,11 +12,9 @@ use Petr\Comments\Entity\CommentRepository;
 class DefaultController extends AbstractController
 {
 
-    public function indexAction()
+    public function indexAction(): void
     {
-        $database = new Database();
-        $repository = new CommentRepository($database->getConnection());
-
+        $repository = $this->getCommentRepository();
         $rootComments = $repository->findRootComments();
 
         $this->render(
@@ -25,5 +23,12 @@ class DefaultController extends AbstractController
                 'comments' => $rootComments,
             ]
         );
+    }
+
+    private function getCommentRepository(): CommentRepository
+    {
+        $database = new Database();
+
+        return new CommentRepository($database->getConnection());
     }
 }
