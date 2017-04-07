@@ -5,8 +5,10 @@ $(function () {
         event.stopPropagation();
 
         var $this = $(this);
-        var $comment = $this.parent().parent();
+        var $comment = $this.closest('.comment');
         var requestData = {'parentCommentId': $comment.data('id')};
+
+        $comment.siblings().remove();
 
         $this.hide();
         $('<div class="level-block"></div>').insertAfter($this);
@@ -32,13 +34,11 @@ $(function () {
 
         $this.parent().hide();
 
-        var requestData = {'text': text};
-
-        $.post('/comment/add', requestData, function (responseData) {
+        $.post('/comment/add', {'text': text}, function (responseData) {
             var commentId = JSON.parse(responseData);
             var level = 1;
 
-            var $comment = renderComment(commentId, requestData.text, level);
+            var $comment = renderComment(commentId, text, level);
 
             $comment.insertAfter($('.comment').last());
 
@@ -48,9 +48,8 @@ $(function () {
 
     $body.on('click', '.button.edit', function () {
         var $this = $(this);
-        var $comment = $this.parent().parent();
-        var $buttons = $comment.find('.buttons');
-        var $textContainer = $comment.find('.text');
+        var $buttons = $this.closest('.buttons');
+        var $textContainer = $this.closest('.comment').find('.text');
         var text = $textContainer.html();
 
         $buttons.hide();
@@ -61,7 +60,7 @@ $(function () {
 
     $body.on('click', '.button.save', function () {
         var $this = $(this);
-        var $comment = $this.parent().parent();
+        var $comment = $this.closest('.comment');
         var $buttons = $comment.find('.buttons');
         var $textContainer = $comment.find('.text');
         var text = $comment.find('textarea').val();
@@ -77,18 +76,37 @@ $(function () {
 
     $body.on('click', '.button.reply', function () {
         var $this = $(this);
-        var $comment = $this.parent().parent();
-        var $buttons = $comment.find('.buttons');
-        var $textContainer = $comment.find('.text');
+        var $buttons = $this.closest('.buttons');
+        var $textContainer = $this.closest('.comment').find('.text');
 
         $buttons.hide();
 
-        $textContainer.append('<p><textarea cols="50" rows="3"></textarea>' +
+        $textContainer.append('<p class="reply-block"><textarea cols="50" rows="3"></textarea>' +
             '<span class="button post-reply">Reply</span></p>');
     });
 
+    $body.on('click', '.button.post-reply', function () {
+        var $this = $(this);
+        var $comment = $this.closest('.comment');
+        var $buttons = $comment.find('.buttons');
+        var text = $comment.find('textarea').val();
+        var parentCommentId = $comment.data('id');
+
+        $.post('/comment/add', {'text': text, 'parentCommentId': parentCommentId}, function (responseData) {
+            var commentId = JSON.parse(responseData);
+            var level = $comment.data('level') + 1;
+
+            var $newComment = renderComment(commentId, text, level);
+
+            $newComment.insertAfter($comment);
+        });
+
+        $buttons.show();
+        $('p.reply-block').remove();
+    });
+
     function renderComment(commentId, commentText, commentLevel) {
-        var $html = $('<div class="comment" data-id="' + commentId + '">' +
+        var $html = $('<div class="comment" data-id="' + commentId + '" data-level="' + commentLevel + '">' +
             '<div class="level-block"></div>' +
             '<div class="text">' + commentText + '</div>' +
             '<div class="buttons">' +

@@ -12,7 +12,8 @@
 <h1>Comments</h1>
 
 {foreach $comments as $comment}
-    <div class="comment" data-id="{$comment->getId()}">
+<span class="thread">
+    <div class="comment" data-id="{$comment->getId()}" data-level="{$comment->getLevel()}">
         <div class="viewall">
             <span class="button open" title="View all child comments">view thread</span>
         </div>
@@ -23,6 +24,7 @@
             <span class="button delete" title="Delete this comment and all his children"></span>
         </div>
     </div>
+</span>
 {/foreach}
 
 <div class="controls">
