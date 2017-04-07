@@ -16,8 +16,8 @@ class CommentController extends AbstractController
 
     public function addAction(): void
     {
-        $commentText = $this->getParameter('text');
-        $parentCommentId = $this->getParameter('parentCommentId');
+        $commentText = filter_var($this->getParameter('text'), FILTER_SANITIZE_STRING);
+        $parentCommentId = filter_var($this->getParameter('parentCommentId'), FILTER_VALIDATE_INT);
 
         if (!$commentText) {
         	throw new ValidationError('text');
@@ -27,9 +27,9 @@ class CommentController extends AbstractController
 
         $result = null;
         if ($parentCommentId) {
-            $result = $repository->saveRootComment($commentText);
-        } else {
             $result = $repository->saveReplyComment($commentText, $parentCommentId);
+        } else {
+            $result = $repository->saveRootComment($commentText);
         }
 
         $this->renderJson($result);
