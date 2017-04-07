@@ -14,7 +14,7 @@ class CommentRepository extends AbstractRepository
     /**
      * @return Comment|null
      */
-    public function findById(int $id)
+    public function findById(string $id)
     {
         $queryResult = $this->connection->prepare('
             SELECT id, text, level, left_key, right_key FROM comments WHERE id = :id
@@ -64,7 +64,7 @@ class CommentRepository extends AbstractRepository
      * @return Comment[]
      * @throws EntityNotFound
      */
-    public function findChildComments(int $parentCommentId)
+    public function findChildComments(string $parentCommentId)
     {
         $parentComment = $this->findById($parentCommentId);
 
@@ -104,7 +104,7 @@ class CommentRepository extends AbstractRepository
         return $comments;
     }
 
-    public function saveReplyComment(string $commentText, int $parentCommentId): string
+    public function saveReplyComment(string $commentText, string $parentCommentId): string
     {
         $parentComment = $this->findById($parentCommentId);
 
