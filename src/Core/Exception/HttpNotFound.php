@@ -8,7 +8,7 @@ namespace Petr\Comments\Core\Exception;
 class HttpNotFound extends \Exception
 {
 
-    public function __construct($message = 'Not found')
+    public function __construct($message = 'Not found.')
     {
         parent::__construct($message, 404);
     }
