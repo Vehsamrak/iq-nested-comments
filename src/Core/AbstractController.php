@@ -42,12 +42,17 @@ abstract class AbstractController
     /**
      * Template rendering
      */
-    protected function render($template = 'index', array $parameters = [])
+    protected function render($template = 'index', array $parameters = []): void
     {
         $templateFileName = $template . '.smarty.html';
 
         $this->smarty->assign($parameters);
         $this->smarty->display($templateFileName);
+    }
+
+    protected function renderJson($data): void
+    {
+        echo json_encode($data);
     }
 
     /**
@@ -104,7 +109,7 @@ abstract class AbstractController
         return $controller->processAction($action);
     }
 
-    protected function redirect(string $url)
+    protected function redirect(string $url): void
     {
         header(sprintf('Location: %s', $url));
     }

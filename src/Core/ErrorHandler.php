@@ -16,7 +16,7 @@ class ErrorHandler
         $this->smarty = Smarty::getInstance();
     }
 
-    public function handle(\Exception $exception)
+    public function handle(\Exception $exception): void
     {
         $this->renderException($exception);
     }
@@ -24,7 +24,7 @@ class ErrorHandler
     /**
      * @throws Exception\ConfigParameterNotFound
      */
-    private function renderException(\Exception $exception)
+    private function renderException(\Exception $exception): void
     {
         $this->sendHeaders($exception);
 
@@ -32,7 +32,7 @@ class ErrorHandler
         $this->smarty->display('error/error.smarty.html');
     }
 
-    private function sendHeaders(\Exception $exception)
+    private function sendHeaders(\Exception $exception): void
     {
         header(sprintf('HTTP/1.1 %d %s', $exception->getCode(), $exception->getMessage()));
     }
