@@ -1,4 +1,6 @@
 $(function () {
+    var $body = $('body');
+
     $('.comment .button.open').click(function (event) {
         event.stopPropagation();
 
@@ -43,7 +45,7 @@ $(function () {
         });
     });
 
-    $('.button.edit').click(function () {
+    $body.on('click', '.button.edit', function () {
         var $this = $(this);
         var $comment = $this.parent().parent();
         var $buttons = $comment.find('.buttons');
@@ -56,7 +58,7 @@ $(function () {
             '<span class="button save">Save</span>');
     });
 
-    $('body').on('click', '.button.save', function () {
+    $body.on('click', '.button.save', function () {
         var $this = $(this);
         var $comment = $this.parent().parent();
         var $buttons = $comment.find('.buttons');
