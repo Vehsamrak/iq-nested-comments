@@ -5,6 +5,7 @@ namespace Petr\Comments\Controller;
 use Petr\Comments\Core\AbstractController;
 use Petr\Comments\Core\Database;
 use Petr\Comments\Core\Exception\ValidationError;
+use Petr\Comments\Entity\Comment;
 use Petr\Comments\Entity\CommentRepository;
 
 /**
@@ -32,6 +33,28 @@ class CommentController extends AbstractController
         }
 
         $this->renderJson($result);
+    }
+
+    public function listAction(): void
+    {
+        $parentCommentId = $this->getParameter('parentCommentId');
+
+        if (!$parentCommentId) {
+            throw new ValidationError('parentCommentId');
+        }
+
+        $repository = $this->getCommentRepository();
+
+        $comments = $repository->findChildComments($parentCommentId);
+
+        $commentsData = array_map(
+            function (Comment $comment) {
+                return $comment->hydrate();
+            },
+            $comments
+        );
+
+        $this->renderJson($commentsData);
     }
 
     private function getCommentRepository(): CommentRepository

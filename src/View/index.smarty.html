@@ -1,12 +1,11 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="web/css/styles.css"/>
-    <link rel="stylesheet" type="text/css" href="web/css/styles.css"/>
     <meta charset="UTF-8">
     <title>Nested Comments</title>
     <link href="/css/styles.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/js/scripts.js"></script>
 </head>
 <body>
 
@@ -14,7 +13,7 @@
 
 {foreach $comments as $comment}
     <div class="comment" data-id="{$comment->getId()}">
-        <span class="button closed" title="View all child comments">view all</span>
+        <span class="button open" title="View all child comments">view all</span>
         <span class="text">
             {$comment->getText()}
         </span>

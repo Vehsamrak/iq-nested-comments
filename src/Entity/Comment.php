@@ -15,13 +15,16 @@ class Comment
     /** @var int */
     private $level;
     /** @var int */
+    private $leftKey;
+    /** @var int */
     private $rightKey;
 
-    public function __construct(string $text, int $level, int $rightKey, int $id = null)
+    public function __construct(string $text, int $level, int $leftKey, int $rightKey, int $id = null)
     {
         $this->id = $id;
         $this->text = $text;
         $this->level = $level;
+        $this->leftKey = $leftKey;
         $this->rightKey = $rightKey;
     }
 
@@ -40,8 +43,21 @@ class Comment
         return $this->text;
     }
 
+    public function getLeftKey(): int
+    {
+        return $this->leftKey;
+    }
+
     public function getRightKey(): int
     {
         return $this->rightKey;
+    }
+
+    public function hydrate(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'text' => $this->getText(),
+        ];
     }
 }

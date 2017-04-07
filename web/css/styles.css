@@ -77,7 +77,7 @@ h1 {
     content: "✍";
 }
 
-.closed, .opened {
+.open {
     background-color: #10371d;
     color: white;
 }

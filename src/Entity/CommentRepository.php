@@ -12,37 +12,12 @@ class CommentRepository extends AbstractRepository
 {
 
     /**
-     * @return Comment[]
-     */
-    public function findRootComments(): array
-    {
-        $queryResult = $this->connection->prepare('
-            SELECT id, text, level, right_key FROM comments c WHERE level = 1 ORDER BY left_key
-        ');
-
-        $queryResult->execute();
-        $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
-
-        $comments = [];
-        foreach ($commentsData as $commentData) {
-            $comments[] = new Comment(
-                $commentData['text'],
-                $commentData['level'],
-                $commentData['right_key'],
-                $commentData['id']
-            );
-        }
-
-        return $comments;
-    }
-
-    /**
      * @return Comment|null
      */
     public function findById(int $id)
     {
         $queryResult = $this->connection->prepare('
-            SELECT id, text, level, right_key FROM comments c WHERE c.id = :id
+            SELECT id, text, level, left_key, right_key FROM comments WHERE id = :id
         ');
 
         $queryResult->bindParam('id', $id, \PDO::PARAM_INT);
@@ -53,9 +28,76 @@ class CommentRepository extends AbstractRepository
             ? new Comment(
                 $queryResult['text'],
                 $queryResult['level'],
+                $queryResult['left_key'],
                 $queryResult['right_key'],
                 $queryResult['id']
             ) : null;
+    }
+
+    /**
+     * @return Comment[]
+     */
+    public function findRootComments(): array
+    {
+        $queryResult = $this->connection->prepare('
+            SELECT id, text, level, left_key, right_key FROM comments WHERE level = 1 ORDER BY left_key
+        ');
+
+        $queryResult->execute();
+        $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
+
+        $comments = [];
+        foreach ($commentsData as $commentData) {
+            $comments[] = new Comment(
+                $commentData['text'],
+                $commentData['level'],
+                $commentData['left_key'],
+                $commentData['right_key'],
+                $commentData['id']
+            );
+        }
+
+        return $comments;
+    }
+
+    /**
+     * @return Comment[]
+     * @throws EntityNotFound
+     */
+    public function findChildComments(int $parentCommentId)
+    {
+        $parentComment = $this->findById($parentCommentId);
+
+        if (!$parentComment) {
+            throw new EntityNotFound();
+        }
+
+        $queryResult = $this->connection->prepare('
+            SELECT id, text, level, left_key, right_key FROM comments
+            WHERE left_key >= :left_key 
+              AND right_key <= :right_key 
+              AND level > :level 
+            ORDER BY left_key
+        ');
+
+        $queryResult->bindParam('left_key', $parentComment->getLeftKey(), \PDO::PARAM_INT);
+        $queryResult->bindParam('right_key', $parentComment->getRightKey(), \PDO::PARAM_INT);
+        $queryResult->bindParam('level', $parentComment->getLevel(), \PDO::PARAM_INT);
+        $queryResult->execute();
+        $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
+
+        $comments = [];
+        foreach ($commentsData as $commentData) {
+            $comments[] = new Comment(
+                $commentData['text'],
+                $commentData['level'],
+                $commentData['left_key'],
+                $commentData['right_key'],
+                $commentData['id']
+            );
+        }
+
+        return $comments;
     }
 
     public function saveReplyComment(string $commentText, int $parentCommentId): int
