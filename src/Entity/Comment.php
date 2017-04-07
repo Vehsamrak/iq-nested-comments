@@ -53,6 +53,11 @@ class Comment
         return $this->rightKey;
     }
 
+    public function setText(string $text): void
+    {
+        $this->text = $text;
+    }
+
     public function hydrate(): array
     {
         return [

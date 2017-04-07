@@ -4,6 +4,7 @@ namespace Petr\Comments\Controller;
 
 use Petr\Comments\Core\AbstractController;
 use Petr\Comments\Core\Database;
+use Petr\Comments\Core\Exception\EntityNotFound;
 use Petr\Comments\Core\Exception\ValidationError;
 use Petr\Comments\Entity\Comment;
 use Petr\Comments\Entity\CommentRepository;
@@ -17,7 +18,7 @@ class CommentController extends AbstractController
     public function addAction(): void
     {
         $commentText = filter_var($this->getParameter('text'), FILTER_SANITIZE_STRING);
-        $parentCommentId = filter_var($this->getParameter('parentCommentId'), FILTER_VALIDATE_INT);
+        $parentCommentId = filter_var($this->getParameter('parentCommentId'), FILTER_SANITIZE_STRING);
 
         if (!$commentText) {
         	throw new ValidationError('text');
@@ -37,7 +38,7 @@ class CommentController extends AbstractController
 
     public function listAction(): void
     {
-        $parentCommentId = $this->getParameter('parentCommentId');
+        $parentCommentId = filter_var($this->getParameter('parentCommentId'), FILTER_SANITIZE_STRING);
 
         if (!$parentCommentId) {
             throw new ValidationError('parentCommentId');
@@ -55,6 +56,26 @@ class CommentController extends AbstractController
         );
 
         $this->renderJson($commentsData);
+    }
+
+    public function editAction(): void
+    {
+        $commentId = filter_var($this->getParameter('id'), FILTER_SANITIZE_STRING);
+        $commentText = filter_var($this->getParameter('text'), FILTER_SANITIZE_STRING);
+
+        if (!$commentId || !$commentText) {
+            throw new ValidationError('id, text');
+        }
+
+        $repository = $this->getCommentRepository();
+        $comment = $repository->findById($commentId);
+
+        if (!$comment) {
+        	throw new EntityNotFound();
+        }
+
+        $comment->setText($commentText);
+        $repository->save($comment);
     }
 
     private function getCommentRepository(): CommentRepository

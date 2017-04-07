@@ -65,8 +65,13 @@ $(function () {
         var $textContainer = $comment.find('.text');
         var text = $comment.find('textarea').val();
 
-        $textContainer.html(text);
-        $buttons.show();
+        $.post('/comment/edit', {
+            'id': $comment.data('id'),
+            'text': text
+        }, function () {
+            $textContainer.html(text);
+            $buttons.show();
+        });
     });
 
     function renderComment(commentId, commentText, commentLevel) {

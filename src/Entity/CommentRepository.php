@@ -16,22 +16,15 @@ class CommentRepository extends AbstractRepository
      */
     public function findById(string $id)
     {
-        $queryResult = $this->connection->prepare('
+        $query = $this->connection->prepare('
             SELECT id, text, level, left_key, right_key FROM comments WHERE id = :id
         ');
 
-        $queryResult->bindParam('id', $id, \PDO::PARAM_INT);
-        $queryResult->execute();
-        $queryResult = $queryResult->fetch(\PDO::FETCH_ASSOC);
+        $query->bindParam('id', $id, \PDO::PARAM_INT);
+        $query->execute();
+        $query = $query->fetch(\PDO::FETCH_ASSOC);
 
-        return $queryResult
-            ? new Comment(
-                $queryResult['id'],
-                $queryResult['text'],
-                $queryResult['level'],
-                $queryResult['left_key'],
-                $queryResult['right_key']
-            ) : null;
+        return $query ? $this->createCommentFromArray($query) : null;
     }
 
     /**
@@ -39,22 +32,16 @@ class CommentRepository extends AbstractRepository
      */
     public function findRootComments(): array
     {
-        $queryResult = $this->connection->prepare('
+        $query = $this->connection->prepare('
             SELECT id, text, level, left_key, right_key FROM comments WHERE level = 1 ORDER BY left_key
         ');
 
-        $queryResult->execute();
-        $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
+        $query->execute();
+        $commentsData = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         $comments = [];
         foreach ($commentsData as $commentData) {
-            $comments[] = new Comment(
-                $commentData['id'],
-                $commentData['text'],
-                $commentData['level'],
-                $commentData['left_key'],
-                $commentData['right_key']
-            );
+            $comments[] = $this->createCommentFromArray($commentData);
         }
 
         return $comments;
@@ -72,7 +59,7 @@ class CommentRepository extends AbstractRepository
             throw new EntityNotFound();
         }
 
-        $queryResult = $this->connection->prepare('
+        $query = $this->connection->prepare('
             SELECT id, text, level, left_key, right_key FROM comments
             WHERE left_key >= :left_key 
               AND right_key <= :right_key 
@@ -84,21 +71,16 @@ class CommentRepository extends AbstractRepository
         $rightKey = $parentComment->getRightKey();
         $level = $parentComment->getLevel();
 
-        $queryResult->bindParam('left_key', $leftKey, \PDO::PARAM_INT);
-        $queryResult->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
-        $queryResult->bindParam('level', $level, \PDO::PARAM_INT);
-        $queryResult->execute();
-        $commentsData = $queryResult->fetchAll(\PDO::FETCH_ASSOC);
+        $query->bindParam('left_key', $leftKey, \PDO::PARAM_INT);
+        $query->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
+        $query->bindParam('level', $level, \PDO::PARAM_INT);
+        $query->execute();
+
+        $commentsData = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         $comments = [];
         foreach ($commentsData as $commentData) {
-            $comments[] = new Comment(
-                $commentData['id'],
-                $commentData['text'],
-                $commentData['level'],
-                $commentData['left_key'],
-                $commentData['right_key']
-            );
+            $comments[] = $this->createCommentFromArray($commentData);
         }
 
         return $comments;
@@ -123,15 +105,25 @@ class CommentRepository extends AbstractRepository
         return $this->persistComment($commentText, $rightKey, $level);
     }
 
+    public function save(Comment $comment): void
+    {
+        $query = $this->connection->prepare('UPDATE comments SET text = :text WHERE id = :id');
+
+        $id = $comment->getId();
+        $text = $comment->getText();
+
+        $query->bindParam('id', $id, \PDO::PARAM_STR);
+        $query->bindParam('text', $text, \PDO::PARAM_STR);
+
+        $query->execute();
+    }
+
     private function getMaximalRightKey(): int
     {
-        $queryResult = $this->connection->prepare('
-            SELECT MAX(right_key) FROM comments;
-        ');
+        $query = $this->connection->prepare('SELECT MAX(right_key) FROM comments');
+        $query->execute();
 
-        $queryResult->execute();
-
-        $maximalRightKey = $queryResult->fetch(\PDO::FETCH_COLUMN);
+        $maximalRightKey = $query->fetch(\PDO::FETCH_COLUMN);
 
         return (int) $maximalRightKey;
     }
@@ -166,5 +158,16 @@ class CommentRepository extends AbstractRepository
         $queryResults->execute();
 
         return $id;
+    }
+
+    private function createCommentFromArray(array $commentData): Comment
+    {
+        return new Comment(
+            $commentData['id'],
+            $commentData['text'],
+            $commentData['level'],
+            $commentData['left_key'],
+            $commentData['right_key']
+        );
     }
 }
