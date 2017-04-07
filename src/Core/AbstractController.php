@@ -20,12 +20,7 @@ abstract class AbstractController
 
     public function __construct()
     {
-        $viewPath = join(DIRECTORY_SEPARATOR, [SRC_PATH, 'View']);
-        $templateCompilePath = join(DIRECTORY_SEPARATOR, [SRC_PATH, '..', 'cache']);
-
-        $this->smarty = new \Smarty();
-        $this->smarty->setTemplateDir($viewPath);
-        $this->smarty->setCompileDir($templateCompilePath);
+        $this->smarty = SmartyFactory::create();
     }
 
     /**
