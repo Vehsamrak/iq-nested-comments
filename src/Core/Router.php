@@ -39,31 +39,31 @@ class Router
 
     private function parseRoutes(): array
     {
-        $pathInfo = $_SERVER['PATH_INFO'] ?? null;
+        $pathInfo = $_SERVER['REQUEST_URI'] ?? null;
 
         return $pathInfo ? explode('/', $pathInfo) : [];
     }
 
     private function getControllerName(array $routes): string
     {
-        $route = self::DEFAULT_CONTROLLER_NAME;
-
-        if (isset($routes[1])) {
-            $route = strtolower($routes[1]);
+        if (empty($routes[1])) {
+            $controllerName = self::DEFAULT_CONTROLLER_NAME;
+        } else {
+            $controllerName = strtolower($routes[1]);
         }
 
         $classPath = explode('\\', __NAMESPACE__);
         array_pop($classPath);
         $newClassPath = implode('\\', $classPath);
 
-        return sprintf('\\%s\\Controller\\%sController', $newClassPath, ucfirst($route));
+        return sprintf('\\%s\\Controller\\%sController', $newClassPath, ucfirst($controllerName));
     }
 
     private function getAction(array $routes): string
     {
-        $action = self::DEFAULT_ACTION_NAME;
-
-        if (isset($routes[2])) {
+        if (empty($routes[2])) {
+            $action = self::DEFAULT_ACTION_NAME;
+        } else {
             $action = strtolower($routes[2]);
         }
 
