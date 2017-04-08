@@ -32,6 +32,7 @@
 - `src/Entity` - Domain models and their repositories
 - `src/View` - Smarty view templates
 - `src/Core` - Structure scaffoldings (non-business logic)
+- `src/config.php` - Database configuration file
 
 ---
 ### Database table schema
