@@ -6,6 +6,7 @@
 1. `composer install`
 1. Run php builtin webserver `php -S localhost:8000 -t web`
 1. Application is ready on `http://localhost:8000`
+
 ---
 ### Features
 
@@ -13,7 +14,7 @@
 
 [✓] No frameworks were used
 
-[✓] MVC structure
+[✓] MVC project structure
 
 [✓] Usage of Smarty
 
@@ -21,8 +22,18 @@
 
 [✓] Nested Sets were used to store tree structure in database
 
----
+[✓] PSR-2
 
+---
+### Project structure (MVC)
+- `web` - public directory for web server
+- `src` - source code
+- `src/Controller` - Controllers
+- `src/Entity` - Domain models and their repositories
+- `src/View` - Smarty view templates
+- `src/Core` - Structure scaffoldings (non-business logic)
+
+---
 ### Database table schema
 
 ```sql
