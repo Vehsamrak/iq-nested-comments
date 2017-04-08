@@ -159,7 +159,7 @@ class CommentRepository extends AbstractRepository
 
     private function persistComment(string $commentText, int $rightKey, int $level): string
     {
-        $queryResults = $this->connection->prepare('
+        $query = $this->connection->prepare('
             LOCK TABLE comments WRITE;
             
             UPDATE comments 
@@ -179,12 +179,12 @@ class CommentRepository extends AbstractRepository
 
         $id = $this->idGenerator->generateRandomId();
 
-        $queryResults->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
-        $queryResults->bindParam('level', $level, \PDO::PARAM_INT);
-        $queryResults->bindParam('text', $commentText, \PDO::PARAM_STR);
-        $queryResults->bindParam('id', $id, \PDO::PARAM_STR);
+        $query->bindParam('right_key', $rightKey, \PDO::PARAM_INT);
+        $query->bindParam('level', $level, \PDO::PARAM_INT);
+        $query->bindParam('text', $commentText, \PDO::PARAM_STR);
+        $query->bindParam('id', $id, \PDO::PARAM_STR);
 
-        $queryResults->execute();
+        $query->execute();
 
         return $id;
     }
