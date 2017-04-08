@@ -26,13 +26,14 @@
 
 ---
 ### Project structure (MVC)
-- `web` - public directory for web server
 - `src` - source code
 - `src/Controller` - Controllers
 - `src/Entity` - Domain models and their repositories
 - `src/View` - Smarty view templates
 - `src/Core` - Structure scaffoldings (non-business logic)
 - `src/config.php` - Database configuration file
+- `web` - public directory for web server
+- `web/js/scripts.js` - jQuery bindings and DOM manipulations script
 
 ---
 ### Database table schema
